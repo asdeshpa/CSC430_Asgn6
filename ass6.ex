@@ -57,9 +57,9 @@ defmodule NumV do
 end
 
 defmodule BoolV do
-    defstruct [:b]
+    defstruct [:bool]
 
-     @type t :: %BoolV{b: boolean}
+     @type t :: %BoolV{bool: boolean}
 end
 
 defmodule StringV do
@@ -92,8 +92,8 @@ defmodule Env do
             *: %PrimV{op: &Interpreter.multhelper/1},
             /: %PrimV{op: &Interpreter.divhelper/1},
             <=: %PrimV{op: &Interpreter.leq?/1},
-            true: %BoolV{b: true},
-            false: %BoolV{b: false}
+            true: %BoolV{bool: true},
+            false: %BoolV{bool: false}
         }
     end
 end
@@ -164,7 +164,7 @@ defmodule Interpreter do
     @spec leq?(list(Value)) :: Value
     def leq?(args) do
         if length(args) == 2 do
-            %BoolV{b: List.first(args).n <= List.last(args).n}
+            %BoolV{bool: List.first(args).n <= List.last(args).n}
         else
             throw "<=: Incorrect arguments"
         end
@@ -174,8 +174,7 @@ end
 
 
 
-
-###### UNIT TESTING  ######
+###### TEST CASES  ######
 
 ExUnit.start()
 
@@ -209,13 +208,13 @@ defmodule Main do
     test "<=1" do
         assert Interpreter.interp(%AppC{fun: %IdC{s: :<=}, 
         args: [%NumC{n: 5}, %NumC{n: 4}]}, 
-        Env.toplevel()) == %BoolV{b: false}
+        Env.toplevel()) == %BoolV{bool: false}
     end
 
     test "<=2" do
         assert Interpreter.interp(%AppC{fun: %IdC{s: :<=}, 
         args: [%NumC{n: 3}, %NumC{n: 4}]}, 
-        Env.toplevel()) == %BoolV{b: true}
+        Env.toplevel()) == %BoolV{bool: true}
     end
 
     test "num" do
